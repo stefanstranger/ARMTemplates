@@ -88,7 +88,9 @@
                   "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
                ],
                "properties": {
-                  "pythonVersion": "3.4"
+                    "netFrameworkVersion": "v4.0",
+                    "phpVersion": "5.4",
+                    "pythonVersion": "3.4"
                }
             }
          ]

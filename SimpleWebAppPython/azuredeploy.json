@@ -4,13 +4,29 @@
    "parameters": {
       "hostingPlanName": {
          "type": "string",
+         "defaultValue": "SimpleWebAppPythonHP",
          "minLength": 1,
          "metadata": {
             "description": "Name of the hosting plan to use in Azure."
          }
       },
+      "phpVersion": {
+         "type": "string",
+         "defaultValue": "5.4",
+         "allowedValues": [
+            "Off",
+            "5.4",
+            "5.5",
+            "5.6",
+            "7.0"
+         ],
+         "metadata": {
+            "description": "Version of PHP to use in WebApp Settings."
+         }
+      },
       "webSiteName": {
          "type": "string",
+         "defaultValue": "SimpleWebAppPython",
          "minLength": 1,
          "metadata": {
             "description": "Name of the Azure Web app to create."
@@ -88,8 +104,8 @@
                   "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
                ],
                "properties": {
-                    "netFrameworkVersion": "v4.0",
-                    "phpVersion": "5.4",
+                    "netFrameworkVersion": "v3.5",
+                    "phpVersion": "[parameters('phpVersion')]",
                     "pythonVersion": "3.4"
                }
             }

@@ -24,6 +24,28 @@
             "description": "Version of PHP to use in WebApp Settings."
          }
       },
+      "netFrameworkVersion": {
+         "type": "string",
+         "defaultValue": "",
+         "allowedValues": [
+            "v2.0",
+            "v3.0"
+         ],
+         "metadata": {
+            "description": "Version of dot Net Framework to use in WebApp Settings."
+         }
+      },
+       "pythonVersion": {
+         "type": "string",
+         "defaultValue": "3.4",
+         "allowedValues": [
+            "Off",
+            "2.7"
+         ],
+         "metadata": {
+            "description": "Version of PHP to use in WebApp Settings."
+         }
+      },
       "webSiteName": {
          "type": "string",
          "defaultValue": "SimpleWebAppPython",
@@ -34,21 +56,7 @@
       },
       "skuName": {
          "type": "string",
-         "defaultValue": "F1",
-         "allowedValues": [
-            "F1",
-            "D1",
-            "B1",
-            "B2",
-            "B3",
-            "S1",
-            "S2",
-            "S3",
-            "P1",
-            "P2",
-            "P3",
-            "P4"
-         ],
+         "defaultValue": "P1",
          "metadata": {
             "description": "Describes plan's pricing tier and instance size. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
          }
@@ -104,9 +112,9 @@
                   "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
                ],
                "properties": {
-                    "netFrameworkVersion": "v3.5",
+                    "netFrameworkVersion": "[parameters('netFrameVersion')]",
                     "phpVersion": "[parameters('phpVersion')]",
-                    "pythonVersion": "3.4"
+                    "pythonVersion": "[parameters('pythonVersion')]",
                }
             }
          ]

@@ -1,123 +1,134 @@
 {
-   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-   "contentVersion": "1.0.0.0",
-   "parameters": {
-      "hostingPlanName": {
-         "type": "string",
-         "defaultValue": "SimpleWebAppPythonHP",
-         "minLength": 1,
-         "metadata": {
-            "description": "Name of the hosting plan to use in Azure."
-         }
-      },
-      "phpVersion": {
-         "type": "string",
-         "defaultValue": "5.4",
-         "allowedValues": [
-            "Off",
-            "5.4",
-            "5.5",
-            "5.6",
-            "7.0"
-         ],
-         "metadata": {
-            "description": "Version of PHP to use in WebApp Settings."
-         }
-      },
-      "netFrameworkVersion": {
-         "type": "string",
-         "defaultValue": "",
-         "allowedValues": [
-            "v2.0",
-            "v3.0"
-         ],
-         "metadata": {
-            "description": "Version of dot Net Framework to use in WebApp Settings."
-         }
-      },
-       "pythonVersion": {
-         "type": "string",
-         "defaultValue": "3.4",
-         "allowedValues": [
-            "Off",
-            "2.7"
-         ],
-         "metadata": {
-            "description": "Version of PHP to use in WebApp Settings."
-         }
-      },
-      "webSiteName": {
-         "type": "string",
-         "defaultValue": "SimpleWebAppPython",
-         "minLength": 1,
-         "metadata": {
-            "description": "Name of the Azure Web app to create."
-         }
-      },
-      "skuName": {
-         "type": "string",
-         "defaultValue": "P1",
-         "metadata": {
-            "description": "Describes plan's pricing tier and instance size. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
-         }
-      },
-      "skuCapacity": {
-         "type": "int",
-         "defaultValue": 1,
-         "minValue": 1,
-         "metadata": {
-            "description": "Describes plan's instance count"
-         }
-      }
-   },
-   "resources": [
-      {
-         "apiVersion": "2015-08-01",
-         "name": "[parameters('hostingPlanName')]",
-         "type": "Microsoft.Web/serverfarms",
-         "location": "[resourceGroup().location]",
-         "tags": {
-            "displayName": "HostingPlan"
-         },
-         "sku": {
-            "name": "[parameters('skuName')]",
-            "capacity": "[parameters('skuCapacity')]"
-         },
-         "properties": {
-            "name": "[parameters('hostingPlanName')]"
-         }
-      },
-      {
-         "apiVersion": "2015-08-01",
-         "name": "[parameters('webSiteName')]",
-         "type": "Microsoft.Web/sites",
-         "location": "[resourceGroup().location]",
-         "tags": {
-            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "Resource",
-            "displayName": "Website"
-         },
-         "dependsOn": [
-            "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
-         ],
-         "properties": {
-            "name": "[parameters('webSiteName')]",
-            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
-         },
-         "resources": [
-            {
-               "apiVersion": "2015-08-01",
-               "name": "web",
-               "type": "config",
-               "dependsOn": [
-                  "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
-               ],
-               "properties": {
-                    "netFrameworkVersion": "[parameters('netFrameworkVersion')]",
-                    "phpVersion": "[parameters('phpVersion')]",
-                    "pythonVersion": "[parameters('pythonVersion')]"
-               }
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "hostingPlanName": {
+            "type": "string",
+            "defaultValue": "SimpleWebAppPythonHP",
+            "minLength": 1,
+            "metadata": {
+                "description": "Name of the hosting plan to use in Azure."
             }
-         ]
-      }
-   ]
+        },
+        "costCenter": {
+            "defaultValue": "",
+            "type": "string",
+            "metadata": {
+                "description": "Name of CostCenter. Will be using in Tags"
+            },
+            "minLength": 5,
+            "maxLength": 10,
+            "minValue": 5,
+            "maxValue": 10
+        },
+        "phpVersion": {
+            "type": "string",
+            "defaultValue": "5.4",
+            "allowedValues": [
+                "Off",
+                "5.4",
+                "5.5",
+                "5.6",
+                "7.0"
+            ],
+            "metadata": {
+                "description": "Version of PHP to use in WebApp Settings."
+            }
+        },
+        "netFrameworkVersion": {
+            "type": "string",
+            "defaultValue": "",
+            "allowedValues": [
+                "v2.0",
+                "v3.0"
+            ],
+            "metadata": {
+                "description": "Version of dot Net Framework to use in WebApp Settings."
+            }
+        },
+        "pythonVersion": {
+            "type": "string",
+            "defaultValue": "3.4",
+            "allowedValues": [
+                "Off",
+                "2.7"
+            ],
+            "metadata": {
+                "description": "Version of PHP to use in WebApp Settings."
+            }
+        },
+        "webSiteName": {
+            "type": "string",
+            "defaultValue": "SimpleWebAppPython",
+            "minLength": 1,
+            "metadata": {
+                "description": "Name of the Azure Web app to create."
+            }
+        },
+        "skuName": {
+            "type": "string",
+            "defaultValue": "P1",
+            "metadata": {
+                "description": "Describes plan's pricing tier and instance size. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+            }
+        },
+        "skuCapacity": {
+            "type": "int",
+            "defaultValue": 1,
+            "minValue": 1,
+            "metadata": {
+                "description": "Describes plan's instance count"
+            }
+        }
+    },
+    "resources": [
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "HostingPlan"
+            },
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "capacity": "[parameters('skuCapacity')]"
+            },
+            "properties": {
+                "name": "[parameters('hostingPlanName')]"
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[parameters('webSiteName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "Resource",
+                "displayName": "Website"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+            ],
+            "properties": {
+                "name": "[parameters('webSiteName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2015-08-01",
+                    "name": "web",
+                    "type": "config",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
+                    ],
+                    "properties": {
+                        "netFrameworkVersion": "[parameters('netFrameworkVersion')]",
+                        "phpVersion": "[parameters('phpVersion')]",
+                        "pythonVersion": "[parameters('pythonVersion')]"
+                    }
+                }
+            ]
+        }
+    ]
 }

@@ -15,11 +15,7 @@
             "type": "string",
             "metadata": {
                 "description": "Name of CostCenter. Will be using in Tags"
-            },
-            "minLength": 5,
-            "maxLength": 10,
-            "minValue": 5,
-            "maxValue": 10
+            }
         },
         "phpVersion": {
             "type": "string",
@@ -37,7 +33,7 @@
         },
         "netFrameworkVersion": {
             "type": "string",
-            "defaultValue": "",
+            "defaultValue": "v2.0",
             "allowedValues": [
                 "v2.0",
                 "v3.0"
@@ -51,7 +47,8 @@
             "defaultValue": "3.4",
             "allowedValues": [
                 "Off",
-                "2.7"
+                "2.7",
+                "3.4"
             ],
             "metadata": {
                 "description": "Version of PHP to use in WebApp Settings."

@@ -54,6 +54,26 @@
         "description": "Version of PHP to use in WebApp Settings."
       }
     },
+    "javaVersion": {
+      "type": "string",
+      "defaultValue": "",
+      "allowedValues": [
+        "",
+        "1.7",
+        "1.8"
+      ],
+      "metadata": {
+        "description": "Version of PHP to use in WebApp Settings."
+      }
+    },
+    "use32bitWorkerProcess": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Enable 32bit worker process or 64bit, 64bit is not available if you choose free hosting plan."
+      }
+
+    },
     "webSiteName": {
       "type": "string",
       "defaultValue": "SimpleWebAppPython",
@@ -78,10 +98,15 @@
       }
     }
   },
+  "variables":
+  {
+    "hostingPlanNameVariable": "[concat(parameters('hostingPlanName'), uniqueString(resourceGroup().id))]",
+    "WebSiteNameVariable": "[concat(parameters('webSiteName'), uniqueString(resourceGroup().id))]"   
+  },
   "resources": [
     {
       "apiVersion": "2015-08-01",
-      "name": "[parameters('hostingPlanName')]",
+      "name": "[variable('hostingPlanNameVariable')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
       "tags": {
@@ -93,12 +118,12 @@
         "capacity": "[parameters('skuCapacity')]"
       },
       "properties": {
-        "name": "[parameters('hostingPlanName')]"
+        "name": "[variable('hostingPlanNameVariable')]"
       }
     },
     {
       "apiVersion": "2015-08-01",
-      "name": "[parameters('webSiteName')]",
+      "name": "[variable('webSiteNameVariable')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "tags": {
@@ -106,11 +131,11 @@
         "displayName": "Website"
       },
       "dependsOn": [
-        "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+        "[concat('Microsoft.Web/serverfarms/', variable('hostingPlanNameVariable'))]"
       ],
       "properties": {
-        "name": "[parameters('webSiteName')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+        "name": "[variable('webSiteNameVariable')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variable('hostingPlanNameVariable'))]"
       },
       "resources": [
         {
@@ -118,12 +143,15 @@
           "name": "appsettings",
           "type": "config",
           "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
+            "[concat('Microsoft.Web/sites/', variable('webSiteNameVariable'))]"
           ],
           "properties": {
             "netFrameworkVersion": "[parameters('netFrameworkVersion')]",
             "phpVersion": "[parameters('phpVersion')]",
-            "pythonVersion": "[parameters('pythonVersion')]"
+            "pythonVersion": "[parameters('pythonVersion')]",
+            "javaVersion": "[parameters('pythonVersion')]",
+            "use32bitWorkerProcess": "[parameters('use32bitWorkerProcess')]"
+            
           }
         }
       ]

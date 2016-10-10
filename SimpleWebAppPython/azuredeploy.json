@@ -14,7 +14,7 @@
       "defaultValue": "",
       "type": "string",
       "metadata": {
-        "description": "Name of CostCenter. Will be using in Tags"
+        "description": "Name of CostCenter. Will be used in Tags"
       }
     },
     "phpVersion": {
@@ -85,7 +85,8 @@
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "HostingPlan"
+        "displayName": "HostingPlan",
+        "costCenter": "[parameters('costCenter')]"
       },
       "sku": {
         "name": "[parameters('skuName')]",
@@ -114,7 +115,7 @@
       "resources": [
         {
           "apiVersion": "2015-08-01",
-          "name": "web",
+          "name": "appsettings",
           "type": "config",
           "dependsOn": [
             "[concat('Microsoft.Web/sites/', parameters('webSiteName'))]"
@@ -127,5 +128,19 @@
         }
       ]
     }
-  ]
+  ],
+  "outputs": {
+    "hostingPlanName": {
+      "type": "string",
+      "value": "[concat('The hostingplan name:', parameters('hostingPlanName'))]"
+    },
+    "costCenter": {
+      "type": "string",
+      "value": "[concat('The costCenter name:',parameters('costCenter'))]"
+    },
+    "webSiteName": {
+      "type": "string",
+      "value": "[concat('The web site name:',parameters('webSiteName'))]"
+    }
+  }
 }

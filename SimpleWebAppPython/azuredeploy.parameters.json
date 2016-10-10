@@ -3,10 +3,22 @@
    "contentVersion": "1.0.0.0",
    "parameters": {
       "hostingPlanName": {
-         "value": "GEN-UNIQUE"
+         "value": "SimpleWebAppHP"
       },
       "webSiteName": {
-         "value": "GEN-UNIQUE"
+         "value": "SimpleWebAppContoso"
+      },
+      "costCenter": {
+         "value": "123456"
+      },
+      "phpVersion": {
+         "value": "7.0"
+      },
+      "netFrameworkVersion": {
+         "value": "v3.0"
+      },
+      "pythonVersion": {
+         "value": "2.7"
       }
    }
 }

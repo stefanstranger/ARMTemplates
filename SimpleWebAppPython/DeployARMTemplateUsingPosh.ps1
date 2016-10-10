@@ -16,7 +16,7 @@
 #region Variables
 $ResourceGroupName = 'ContosoHWebAppRG'
 $Location = 'West Europe'
-$PathToJsonTemplate = 'C:\Users\Stefan\Documents\GitHub\ARMTemplates\SimpleWebAppPython'
+$PathToJsonTemplate = "$env:userprofile\Documents\GitHub\ARMTemplates\SimpleWebAppPython"
 $ARMTemplateName = 'azuredeploy.json'
 $ARMTemplateParameterName = 'azuredeploy.parameters.json'
 #endregion
@@ -39,14 +39,14 @@ Set-AzureRmContext -SubscriptionId $subscription.subscriptionId -TenantId $subsc
 #region deploy webapp
 #Create new Resource Group for WebApp
 #First Check if Resource Group already exists.
-If (!(Get-AzureRMResourceGroup -name $ResourceGroupName -Location $Location))
+If (!(Get-AzureRMResourceGroup -name $ResourceGroupName -Location $Location -ErrorAction SilentlyContinue))
 {
     New-AzureRmResourceGroup -Name $ResourceGroupName -Location $Location
 }
 
 #Test ARM Template
 $ARMTemplate = $PathToJsonTemplate + '\' + $ARMTemplateName
-Test-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $ARMTemplate
+Test-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $ARMTemplate -OutVariable testarmtemplate
 
 #Deploy ARM Template with local Parameter file
 $ARMTemplateParameter = $PathToJsonTemplate + '\' + $ARMTemplateParameterName
@@ -65,10 +65,6 @@ Get-AzureRmWebApp -ResourceGroupName $ResourceGroupName -OutVariable WebApp
 #Get WebApp Hosting Plan name
 $HostingPlanName = $WebApp.ServerFarmId.split('/')[-1]
 Get-AzureRmResource -ResourceGroupName $ResourceGroupName -ResourceType Microsoft.Web/serverfarms -ResourceName $HostingPlanName -ApiVersion 2015-08-01
-
-#Get WebApp Web Properties
-Get-AzureRmResource -ResourceGroupName $ResourceGroupName -ResourceType Microsoft.Web/sites/config -ResourceName "$($WebApp.SiteName)/web" -ApiVersion 2015-08-01 |
-    Select-Object -ExpandProperty Properties
 
 #Get WebApp Web Properties
 Get-AzureRmResource -ResourceGroupName $ResourceGroupName -ResourceType Microsoft.Web/sites/config -ResourceName "$($WebApp.SiteName)/web" -ApiVersion 2015-08-01 |

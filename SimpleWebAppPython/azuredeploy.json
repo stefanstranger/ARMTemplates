@@ -106,7 +106,7 @@
   "resources": [
     {
       "apiVersion": "2015-08-01",
-      "name": "[variable('hostingPlanNameVariable')]",
+      "name": "[variables('hostingPlanNameVariable')]",
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
       "tags": {
@@ -118,12 +118,12 @@
         "capacity": "[parameters('skuCapacity')]"
       },
       "properties": {
-        "name": "[variable('hostingPlanNameVariable')]"
+        "name": "[variables('hostingPlanNameVariable')]"
       }
     },
     {
       "apiVersion": "2015-08-01",
-      "name": "[variable('webSiteNameVariable')]",
+      "name": "[variables('webSiteNameVariable')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "tags": {
@@ -131,11 +131,11 @@
         "displayName": "Website"
       },
       "dependsOn": [
-        "[concat('Microsoft.Web/serverfarms/', variable('hostingPlanNameVariable'))]"
+        "[concat('Microsoft.Web/serverfarms/', variables('hostingPlanNameVariable'))]"
       ],
       "properties": {
-        "name": "[variable('webSiteNameVariable')]",
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variable('hostingPlanNameVariable'))]"
+        "name": "[variables('webSiteNameVariable')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanNameVariable'))]"
       },
       "resources": [
         {
@@ -143,7 +143,7 @@
           "name": "appsettings",
           "type": "config",
           "dependsOn": [
-            "[concat('Microsoft.Web/sites/', variable('webSiteNameVariable'))]"
+            "[concat('Microsoft.Web/sites/', variables('webSiteNameVariable'))]"
           ],
           "properties": {
             "netFrameworkVersion": "[parameters('netFrameworkVersion')]",
@@ -160,7 +160,7 @@
   "outputs": {
     "hostingPlanName": {
       "type": "string",
-      "value": "[concat('The hostingplan name:', parameters('hostingPlanName'))]"
+      "value": "[concat('The hostingplan name:', variables('hostingPlanNameVariable'))]"
     },
     "costCenter": {
       "type": "string",
@@ -168,7 +168,7 @@
     },
     "webSiteName": {
       "type": "string",
-      "value": "[concat('The web site name:',parameters('webSiteName'))]"
+      "value": "[concat('The web site name:',variables('webSiteNameVariable'))]"
     }
   }
 }
